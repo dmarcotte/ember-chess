@@ -1,6 +1,8 @@
 # SC-Chess
 
-SC-Chess is a chess viewer written using Sproutcore 2.0.
+SC-Chess is a chess viewer written using Sproutcore 2.0.  
+See a classic game in action [here](http://dmarcotte.github.com/sc-chess/immortal.html),
+and a not-so-classic game [here](http://dmarcotte.github.com/sc-chess/amateur.html).
 
 ## Purpose
 
