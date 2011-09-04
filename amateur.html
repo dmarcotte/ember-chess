@@ -1,0 +1,158 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<script type="text/html" data-template-name="chessPieceTmpl">
+    {{{symbol}}}
+</script>
+
+<div id="chess-viewer-root" class="chess-viewer">
+  <script type="text/html">
+    <h1>{{Chess.gameController.gameDefinition.title}}</h1>
+    <div class="chess-board-container">
+        <span class="chess-board-border">
+          {{#view Chess.GameView}}
+            <table class="chess-board">
+                <tr>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                </tr>
+                <tr>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                </tr>
+                <tr>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                </tr>
+                <tr>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                </tr>
+                <tr>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                </tr>
+                <tr>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                </tr>
+                <tr>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                </tr>
+                <tr>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                    <td class="square square_black"></td>
+                    <td class="square square_white"></td>
+                </tr>
+            </table>
+            {{view GamePiecesView}}
+          {{/view}}
+        </span>
+    </div>
+
+    <div class="chess-game-info-container">
+        {{#view Chess.GameInfoView}}
+          {{#view Chess.NextButton}}
+              Next
+          {{/view}}
+          {{#view Chess.PlayButton}}
+              {{text}}
+          {{/view}}
+          <span class="chess-game-info-attack">
+              {{game.currentMove.attack}}
+          </span>
+          <div class="chess-game-info-text">
+              {{game.gameDefinition.whitePlayer}}
+              <span class="chess-game-info-versus">VS.</span>
+              {{game.gameDefinition.blackPlayer}}
+          </div>
+          <table class="chess-game-info-captures">
+              <tr>
+                  <td class="chess-game-info-captures-label">
+                      Captured White
+                  </td>
+                  <td class="chess-game-info-captures-value">
+                      {{view capturedWhiteView}}
+                  </td>
+              </tr>
+              <tr>
+                  <td class="chess-game-info-captures-label">
+                      Captured Black
+                  </td>
+                  <td class="chess-game-info-captures-value">
+                      {{view capturedBlackView}}
+                  </td>
+              </tr>
+          </table>
+          <div class="chess-game-info-text">
+              {{game.currentMove.comment}}
+          </div>
+        {{/view}}
+    </div>
+  </script>
+</div>
+
+<script src="js/libs/jquery-1.6.2.js"></script>
+<script src="js/libs/sproutcore-2.0.beta.3.js"></script>
+<script src="js/app.js"></script>
+<script src="js/model.js"></script>
+<script src="js/controller.js"></script>
+<script src="js/view.js"></script>
+
+<script type="text/javascript">
+    Chess.gameController.set('gameDefinition', Chess.theAmateurGame);
+</script>
+</body>
