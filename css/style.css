@@ -213,7 +213,7 @@ td { vertical-align: top; }
 
 .chess-viewer {
     margin: 20px auto;
-    width: 1000px;
+    width: 990px;
 }
 
 .chess-board-container {
@@ -233,14 +233,15 @@ td { vertical-align: top; }
 .chess-game-info-button {
     font-size: 20px;
     padding: 10px 20px;
-    width: 110px;
+    width: 122px;
 }
 
 .chess-game-info-attack {
     text-transform: uppercase;
     font-size: 24px;
     font-style: italic;
-    margin: 0 25px;
+    margin: 0;
+    padding: 8px 0 0 10px;
 }
 
 .chess-game-info-captures td {

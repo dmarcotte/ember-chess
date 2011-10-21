@@ -18,21 +18,45 @@
   });
 
   /**
+   * Subclasses must override color to specify whether they want the
+   * white captured pieces, or the black
+   */
+  Chess.CapturedView = SC.CollectionView.extend({
+    color: null,
+    capturedForColor: function() {
+      var captured = Chess.gameController.get('captured');
+      var capturedForColor = [];
+
+      // grab the captured pieces for the color we care about
+      for (var prop in captured) {
+        if (!captured.hasOwnProperty(prop)) {
+          continue;
+        }
+        var capturedPiece = captured[prop];
+        if (capturedPiece && capturedPiece.color === this.get('color')) {
+          capturedForColor.push(capturedPiece);
+        }
+      }
+
+      // sort them in order of move the were captured on dm todo sort these?
+      return capturedForColor;
+    }.property('Chess.gameController.captured').cacheable(),
+    contentBinding: 'capturedForColor',
+    itemViewClass: Chess.PieceView.extend({
+      pieceBinding: 'content'
+    })
+  });
+
+  /**
    * Chess.GameInfoView renders information on the game in progress
    */
   Chess.GameInfoView = SC.View.extend({
     gameBinding: 'Chess.gameController',
-    capturedWhiteView: SC.CollectionView.extend({
-      contentBinding: 'parentView.game.captured.white',
-      itemViewClass: Chess.PieceView.extend({
-        pieceBinding: 'content'
-      })
+    capturedWhiteView: Chess.CapturedView.extend({
+      color: 'white'
     }),
-    capturedBlackView: SC.CollectionView.extend({
-      contentBinding: 'parentView.game.captured.black',
-      itemViewClass: Chess.PieceView.extend({
-        pieceBinding: 'content'
-      })
+    capturedBlackView: Chess.CapturedView.extend({
+      color: 'black'
     })
   });
 
@@ -86,6 +110,10 @@
           var elemPosition = this.get('gameView').computeElemPosition(this.get('piece'));
 
           if (elemPosition) {
+            if (!this.$().is(':visible')) {
+              this.$().show();
+              this.$().animate({opacity: 1});
+            }
             this.$().animate({top: elemPosition.top, left: elemPosition.left}, 300);
           } else {
             this.$().animate({opacity: 0}, function() {
@@ -133,6 +161,14 @@
    */
   Chess.NextButton = Chess.Button.extend({
     action: 'nextMove'
+  });
+
+  /**
+   * Previous button moves the viewer to the chess viewer to the
+   * game's previous move
+   */
+  Chess.PreviousButton = Chess.Button.extend({
+    action: 'previousMove'
   });
 
   /**

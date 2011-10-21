@@ -105,15 +105,15 @@
 
     <div class="chess-game-info-container">
         {{#view Chess.GameInfoView}}
-          {{#view Chess.NextButton}}
-              Next
+          {{#view Chess.PreviousButton}}
+              Previous
           {{/view}}
           {{#view Chess.PlayButton}}
               {{text}}
           {{/view}}
-          <span class="chess-game-info-attack">
-              {{game.currentMove.attack}}
-          </span>
+          {{#view Chess.NextButton}}
+            Next
+          {{/view}}
           <div class="chess-game-info-text">
               {{game.gameDefinition.whitePlayer}}
               <span class="chess-game-info-versus">VS.</span>
@@ -137,6 +137,9 @@
                   </td>
               </tr>
           </table>
+          <div class="chess-game-info-attack">
+              {{game.currentMove.attack}}
+          </div>
           <div class="chess-game-info-text">
               {{game.currentMove.comment}}
           </div>
@@ -146,7 +149,7 @@
 </div>
 
 <script src="js/libs/jquery-1.6.2.js"></script>
-<script src="js/libs/sproutcore-2.0.beta.3.js"></script>
+<script src="js/libs/sproutcore.js"></script>
 <script src="js/app.js"></script>
 <script src="js/model.js"></script>
 <script src="js/controller.js"></script>
