@@ -19,7 +19,7 @@ presentation-v1 tag.
 
 ## Todos
 
-* More controls ('previous', 'begin', 'end', 'reset', etc.) would clearly be
+* More controls ('begin', 'end', 'reset', etc.) would clearly be
 nice
 
 * Provide a way to swap between some predefined games
