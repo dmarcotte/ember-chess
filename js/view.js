@@ -37,8 +37,7 @@
           capturedForColor.push(capturedPiece);
         }
       }
-
-      // sort them in order of move the were captured on dm todo sort these?
+      
       return capturedForColor;
     }.property('Chess.gameController.captured').cacheable(),
     contentBinding: 'capturedForColor',
@@ -76,7 +75,7 @@
         top,
         left;
 
-      if (!piece.position) {
+      if (piece.captured) {
         // this piece should not be placed on the board
         return null;
       }
@@ -109,18 +108,20 @@
         positionDidChange: function() {
           var elemPosition = this.get('gameView').computeElemPosition(this.get('piece'));
 
-          if (elemPosition) {
-            if (!this.$().is(':visible')) {
-              this.$().show();
-              this.$().animate({opacity: 1});
-            }
-            this.$().animate({top: elemPosition.top, left: elemPosition.left}, 300);
-          } else {
+          this.$().animate({top: elemPosition.top, left: elemPosition.left}, 300);
+        }.observes('piece.position'),
+        capturedDidChange: function() {
+          var captured = this.getPath('piece.captured');
+
+          if (captured) {
             this.$().animate({opacity: 0}, function() {
               $(this).hide();
             });
+          } else {
+            this.$().show();
+            this.$().animate({opacity: 1});
           }
-        }.observes('piece.position'),
+        }.observes('piece.captured'),
         didInsertElement: function() {
           var elemPosition = this.get('gameView').computeElemPosition(this.get('piece'));
 

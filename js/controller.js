@@ -1,19 +1,4 @@
 (function() {
-  /**
-   * Convenience function which helps us create our chess board
-   */
-  var createRank = function() {
-    return {
-      a: null,
-      b: null,
-      c: null,
-      d: null,
-      e: null,
-      f: null,
-      g: null,
-      h: null
-    }
-  };
 
   /**
    * Call Chess.gameController.set('game', yourGame) with `yourGame`
@@ -31,11 +16,40 @@
 
     _moveNumber: -1,
 
+    _getPieceAtPosition: function(position) {
+      var gamePieceArray = this.get('gamePieces').get('content');
+
+      var idx = gamePieceArray.length;
+      var pieceAtPosition;
+      while (idx--) {
+        var piece = gamePieceArray[idx];
+        if (piece.position.rank === position.rank
+          && piece.position.file === position.file
+          && !piece.captured) {
+          pieceAtPosition = piece;
+        }
+      }
+
+      return pieceAtPosition
+    },
+
     /**
-     * We maintain a record of which pieces have been captured as the game progresses,
-     * indexed by moveNumber
+     * Returns a sparse array of captured pieces, indexed by the move number at which they were captured
      */
-    captured: SC.Object.create({}),
+    captured: function() {
+      var gamePieceArray = this.get('gamePieces').get('content');
+
+      var idx = gamePieceArray.length;
+      var capturedPieces = [];
+      while (idx--) {
+        var piece = gamePieceArray[idx];
+        if (piece.captured) {
+          capturedPieces[piece.captured] = piece;
+        }
+      }
+
+      return capturedPieces;
+    }.property('_moveNumber'),
 
     /**
      * Record the capture of a piece in this game
@@ -43,59 +57,31 @@
      * @param moveNumber The move number on which the piece was captured
      */
     _capture: function(piece, moveNumber) {
-      this.get('captured').set(moveNumber.toString(), piece);
-      // dm todo shouldn't have to do this... file a bug, and refactor captured
-      SC.propertyWillChange(this, 'captured');
-      SC.propertyDidChange(this, 'captured');
+      piece.set('captured', moveNumber);
     },
 
     /**
      * Undo a previous capture, which occurred at the given move.
      * Returns the un-captured piece, or undefined if there was not a capture at this move.
      *
-     * @param moveNumber  The move number for which to revert any captures
+     * @param moveNumber  The move number for which to revert a capture
      */
     _revertCapture: function(moveNumber) {
-      var restoredPiece = this.get('captured').get(moveNumber.toString());
-      if (restoredPiece) {
-        this.get('captured').set(moveNumber, undefined);
+      var gamePieceArray = this.get('gamePieces').get('content');
+
+      var idx = gamePieceArray.length;
+      while (idx--) {
+        var piece = gamePieceArray[idx];
+        if (piece.get('captured') === moveNumber) {
+          piece.set('captured', undefined);
+          break;
+        }
       }
-      // dm todo shouldn't have to do this... file a bug, and refactor captured
-      SC.propertyWillChange(this, 'captured');
-      SC.propertyDidChange(this, 'captured');
-      return restoredPiece;
     },
 
     /**
-     * A 'board' to place the game's pieces on.  By mirroring an actual
-     * board, this makes piece lookup really easy
+     * Returns the move which this game is currently on
      */
-    board: {
-      8: createRank(),
-      7: createRank(),
-      6: createRank(),
-      5: createRank(),
-      4: createRank(),
-      3: createRank(),
-      2: createRank(),
-      1: createRank()
-    },
-
-    /**
-     * Place a 'chess set' on the 'board'.
-     *
-     * Note that `init` is automatically called by SC on construction
-     */
-    init: function() {
-      var ret = this._super();
-      this.get('gamePieces').forEach(function(piece) {
-        this.board[piece.get('position').rank][piece.get('position').file] = piece;
-      }, this);
-      return ret;
-    },
-
-    // dm todo everyone should be calling this.  Also fix up its naming:
-    // it currently sounds like an action because of nextMove and previousMove
     currentMove: function() {
       return this.get('gameDefinition').moves[this.get('_moveNumber')]
     }.property('_moveNumber').cacheable(),
@@ -106,24 +92,13 @@
         return;
       }
 
-      var move = this.get('gameDefinition').moves[this.get('_moveNumber')];
-      var movePiece = this.board[move.toPos.rank][move.toPos.file];
+      var move = this.get('currentMove');
 
-      // sanity check that we've got the right piece
-      if (!movePiece || movePiece.symbol !== move.pieceSymbol || movePiece.color != move.color) {
-        throw 'Move does not match current board';
-      }
-
-      this.board[move.toPos.rank][move.toPos.file] = null;
-      this.board[move.fromPos.rank][move.fromPos.file] = movePiece;
+      var movePiece = this._getPieceAtPosition(move.toPos);
       movePiece.set('position', move.fromPos);
 
-      // if there's a captured piece at the position we're reverting from, grant it new life
-      var capturedPiece = this._revertCapture(this.get('_moveNumber'));
-      if (capturedPiece) {
-        capturedPiece.set('position', move.toPos);
-        this.board[capturedPiece.position.rank][capturedPiece.position.file] = capturedPiece;
-      }
+      // if there's a captured piece for the move we're reverting, grant it new life
+      this._revertCapture(this.get('_moveNumber'));
 
       this.set('_moveNumber', this.get('_moveNumber') - 1);
     },
@@ -137,25 +112,16 @@
       this.set('_moveNumber', this.get('_moveNumber') + 1);
 
       var move = this.get('gameDefinition').moves[this.get('_moveNumber')];
-      var movePiece = this.board[move.fromPos.rank][move.fromPos.file];
 
-      // sanity check that we've got the right piece
-      if (!movePiece || movePiece.symbol !== move.pieceSymbol || movePiece.color != move.color) {
-        throw 'Move does not match current board';
-      }
-
-      this.board[move.fromPos.rank][move.fromPos.file] = null;
+      var movePiece = this._getPieceAtPosition(move.fromPos);
 
       // if there's a piece at the position we're about to occupy, capture it
-      var capturedPiece = this.board[move.toPos.rank][move.toPos.file];
+      var capturedPiece = this._getPieceAtPosition(move.toPos);
       if (capturedPiece) {
-        capturedPiece.set('position', null);
-        // record that this piece was captured here in case we need to un-capture it later
         this._capture(capturedPiece, this.get('_moveNumber'));
       }
 
       movePiece.set('position', move.toPos);
-      this.board[movePiece.position.rank][movePiece.position.file] = movePiece;
     },
 
 
