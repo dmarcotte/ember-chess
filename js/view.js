@@ -8,7 +8,7 @@
    * Chess.PieceView expects subclasses to provide a `piece` property
    * of type Chess.Piece
    */
-  Chess.PieceView = SC.View.extend({
+  Chess.PieceView = Em.View.extend({
     templateName: 'chessPieceTmpl',
     classNames: 'chess-piece',
     piece: null,
@@ -21,7 +21,7 @@
    * Subclasses must override color to specify whether they want the
    * white captured pieces, or the black
    */
-  Chess.CapturedView = SC.CollectionView.extend({
+  Chess.CapturedView = Em.CollectionView.extend({
     color: null,
     capturedForColor: function() {
       var captured = Chess.gameController.get('captured');
@@ -49,7 +49,7 @@
   /**
    * Chess.GameInfoView renders information on the game in progress
    */
-  Chess.GameInfoView = SC.View.extend({
+  Chess.GameInfoView = Em.View.extend({
     gameBinding: 'Chess.gameController',
     capturedWhiteView: Chess.CapturedView.extend({
       color: 'white'
@@ -63,7 +63,7 @@
    * Chess.GameView renders a Chess.Game, animating a progression through
    * the game
    */
-  Chess.GameView = SC.View.extend({
+  Chess.GameView = Em.View.extend({
     classNames: 'chess-board-view',
     /**
      * Compute the {top, left} pair representing where we want to render
@@ -99,7 +99,7 @@
      * this game.  It is a collection of Chess.PieceView specialized to
      * render on the board, and animate between positions
      */
-    GamePiecesView: SC.CollectionView.extend({
+    GamePiecesView: Em.CollectionView.extend({
       contentBinding: 'Chess.gameController.gamePieces',
       itemViewClass: Chess.PieceView.extend({
         pieceBinding: 'content',
@@ -142,17 +142,15 @@
   /**
    * Base button for our chess viewer
    */
-  Chess.Button = SC.Button.extend({
+  Chess.Button = Em.Button.extend({
     target: 'Chess.gameController',
     classNames: 'chess-game-info-button',
     touchStart: function(touch) {
-      // do nothing (prevents double clicks on touch devices); this will be
-      // addressed in a future release of SC2
+      // do nothing (prevents double clicks on touch devices)
     },
 
     touchEnd: function(touch) {
-      // do nothing (prevents double clicks on touch devices); this will be
-      // addressed in a future release of SC2
+      // do nothing (prevents double clicks on touch devices)
     }
   });
 
@@ -178,11 +176,7 @@
   Chess.PlayButton = Chess.Button.extend({
     playingBinding: 'Chess.gameController.playing',
     action: function() {
-      if (this.get('playing')) {
-        return 'pause';
-      } else {
-        return 'play';
-      }
+      return this.get('playing') ? 'pause' : 'play';
     }.property('playing'),
     text: function() {
       return this.get('playing') ? 'Pause' : 'Play';

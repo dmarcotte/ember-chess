@@ -3,7 +3,7 @@
   /**
    * Base class for chess pieces
    */
-  Chess.Piece = SC.Object.extend({
+  Chess.Piece = Em.Object.extend({
       symbol: '',
       color: null,
       toString: function() {
@@ -62,7 +62,7 @@
   /**
    * A chess set, with the pieces defaulted to their initial positions
    */
-  Chess.ChessSet = SC.ArrayProxy.extend({
+  Chess.ChessSet = Em.ArrayProxy.extend({
     content: [
       Chess.Rook.create({ color: 'white', position: {rank: 1, file: 'a'} }),
       Chess.Knight.create({ color: 'white', position: {rank: 1, file: 'b'} }),
@@ -114,7 +114,7 @@
    *       comment: '<comment>'
    *     }
    */
-  Chess.Game = SC.Object.extend({
+  Chess.Game = Em.Object.extend({
     title: '',
     whitePlayer: '',
     blackPlayer: '',

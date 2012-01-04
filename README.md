@@ -1,20 +1,21 @@
-# SC-Chess
+# Ember-Chess
 
-SC-Chess is a chess viewer written using Sproutcore 2.0.  
+Ember-Chess is a chess viewer written using [Ember.js](http://emberjs.com/) ([ember on github](https://github.com/emberjs/ember.js)).
+
 See a classic game in action [here](http://dmarcotte.github.com/sc-chess/immortal.html),
 and a not-so-classic game [here](http://dmarcotte.github.com/sc-chess/amateur.html).
 
 ## Purpose
 
-SC-Chess was built to provide a fun, clear way to present a crash course on
-Sproutcore 2.
+Ember-Chess was built as part of a presentation which was intended to provide a fun, clear way to present a
+crash course on Ember.js.
 
 * The presentation can be found in presentation.js.  Some of it may be a bit
 vague in the absence of the talky parts, but it should still do a decent job
-of exploring the app while pointing to some of the features of Sproutcore 2
+of exploring the app while pointing to some of the features of Ember
 and how they work.
 
-* The code corresponding directly to the presentation can be found at the
+* The code corresponding directly to the original presentation can be found at the
 presentation-v1 tag.
 
 ## Todos
@@ -29,7 +30,7 @@ a better interface for the app than
 "Chess.gameController.set('gameDefinition', Chess.game);"
 
 * There's a missed opportunity here to show off one of the huge benefits
-of using Sproutcore to bring structure to this app:
+of using Ember to bring structure to this app:
 there should be tests demonstrating how testable the app is
 
 * A .pgn -> Chess.Game parser would be totally badass.  We could even have
@@ -38,7 +39,7 @@ plays it through
 
 * A completely different "view" would be a compelling demonstration of the app
 architecture.  Should be easy to instantiate a gameController (but
-no SC.Views), and step through it console.logging each move on a text
+no Em.Views), and step through it console.logging each move on a text
 'board')
 
 * The unicode pieces are fun, but it'd be nice to have some slick images

@@ -4,7 +4,7 @@
    * Call Chess.gameController.set('game', yourGame) with `yourGame`
    * of type Chess.game to watch the game unfold
    */
-  Chess.gameController = SC.Object.create({
+  Chess.gameController = Em.Object.create({
 
     /**
      * The game.  Ideally set this to something, otherwise

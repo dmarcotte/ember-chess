@@ -5,9 +5,9 @@
 
 
 /**
- * SPROUTCORE
+ * EMBER.JS
  *
- * 1. Sproutcore in a nutshell
+ * 1. Ember in a nutshell
  * 2. Model objects and classical inheritance
  * 3. Building an application
  * 4. Building UI
@@ -28,9 +28,9 @@
 
 
 /*******************************************************************************
-1. SPROUTCORE IN A NUTSHELL
+1. EMBER IN A NUTSHELL
  *
- * Sproutcore is a javascript library which facilitates
+ * Ember is a javascript library which facilitates
  * building rich applications on the client side
  */
 
@@ -48,7 +48,7 @@
 /**
  * OKAY... WHAT ABOUT OUTSIDE OF A NUTSHELL?
  *
- * Sproutcore provides js infrastructure for the following:
+ * Ember provides js infrastructure for the following:
  *
  * - data bindings
  *
@@ -72,7 +72,7 @@
 /**
  * CHECK OUT THIS CHESS APP!  Get it...?  "Check"... huhn?  Anybody?
  *
- * To show off Sproutcore and demonstrate how it works, we're going to
+ * To show off Ember and demonstrate how it works, we're going to
  * become best MATES with an application which plays through chess games.
  */
 
@@ -98,7 +98,7 @@
    *
    * Note the 'extend' method
    */
-  Chess.Piece = SC.Object.extend({
+  Chess.Piece = Em.Object.extend({
       symbol: '',
       color: null,
       unicode: {black: '', white: ''},
@@ -132,7 +132,7 @@
   * Note that for our Piece objects, we're calling 'create' rather than
   * 'extend' now
   */
-  Chess.chessSet = SC.ArrayProxy.extend({
+  Chess.chessSet = Em.ArrayProxy.extend({
     content: [
       Chess.Rook.create({ color: 'white', position: {rank: 1, file: 'a'} }),
       Chess.Knight.create({ color: 'white', position: {rank: 1, file: 'b'} }),
@@ -146,8 +146,8 @@
 /**
  * Digression: ArrayProxy
  *
- * ArrayProxy is one of the base classes Sproutcore provides.  It's often
- * the workhorse of Sproutcore apps since I've found it to be great for data
+ * ArrayProxy is one of the base classes Ember provides.  It's often
+ * the workhorse of Ember apps since I've found it to be great for data
  * driven apps.
  *
  * The reason we would proxy an array is two-fold:
@@ -218,7 +218,7 @@
    * Chess.gameController is the heart of this app, taking care of the
    * actual business of managing the state of the game
    */
-  Chess.gameController = SC.Object.create({
+  Chess.gameController = Em.Object.create({
 
     /**
      * The game.  Ideally set this to something, otherwise
@@ -232,11 +232,11 @@
      * We maintain the lists of which pieces have been captured as the game
      * progresses
      *
-     * Still in `Chess.gameController = SC.Object.create({`
+     * Still in `Chess.gameController = Em.Object.create({`
      */
-    captured: SC.Object.create({
-      white: SC.ArrayProxy.create({content: []}),
-      black: SC.ArrayProxy.create({content: []})
+    captured: Em.Object.create({
+      white: Em.ArrayProxy.create({content: []}),
+      black: Em.ArrayProxy.create({content: []})
     }),
 
 
@@ -246,7 +246,7 @@
      * A 'board' to place the game's pieces on.  By mirroring an actual
      * board, this makes piece lookup really easy
      *
-     * Still in `Chess.gameController = SC.Object.create({`
+     * Still in `Chess.gameController = Em.Object.create({`
      */
     board: {
       /** ... snip! create 8x8 board ...**/
@@ -259,11 +259,11 @@
     /**
      * Place a 'chess set' on the 'board'.
      *
-     * Note that `init` is automatically called by SC on construction
+     * Note that `init` is automatically called by Ember on construction
      *
      * Note also the "_super" invocation
      *
-     * Still in `Chess.gameController = SC.Object.create({`
+     * Still in `Chess.gameController = Em.Object.create({`
      */
     init: function() {
       var ret = this._super();
@@ -282,7 +282,7 @@
 
 
     /**
-     * Still in `Chess.gameController = SC.Object.create({`
+     * Still in `Chess.gameController = Em.Object.create({`
      * 
      * MEGA SNIP!!! the following methods are also defined, but they're
      * pretty boring in that they work exactly as you'd expect
@@ -342,7 +342,7 @@
 /*******************************************************************************
 4. BUILDING UI
  *
- * Sproutcore's real power comes into play when we're displaying all this
+ * Ember's real power comes into play when we're displaying all this
  * stuff and making it interactive.  Recall my list of features from earlier:
  *   a. data bindings
  *   b. binding-aware templates
@@ -397,19 +397,19 @@
 /**
  * POWER: BINDINGS, TEMPLATES, OBSERVERS AND COMPUTED PROPERTIES
  *
- * I like to think of Sproutcore as letting you develop you app as if
+ * I like to think of Ember as letting you develop you app as if
  * you only code to a single moment in time: take this value, do this thing.
  *
- * Then, Sproutcore takes care of reliving that moment every time the value
+ * Then, Ember takes care of reliving that moment every time the value
  * changes.
  *
  * Consider {{view capturedWhiteView}} from our template...
  */
 
-  Chess.GameInfoView = SC.View.extend({
+  Chess.GameInfoView = Em.View.extend({
     /** snip! **/
 
-    capturedWhiteView: SC.CollectionView.extend({
+    capturedWhiteView: Em.CollectionView.extend({
       // 'Binding' suffix is magic... but, like, good magic
       contentBinding: 'parentView.game.captured.white',
       itemViewClass: Chess.PieceView.extend({
